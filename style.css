@@ -19,3 +19,13 @@ pre {
   padding: 15px;
   white-space: pre-wrap;
 }
+footer {
+  margin-top: 40px;
+  text-align: center;
+  color: #555;
+  font-size: 14px;
+}
+
+footer hr {
+  margin-bottom: 10px;
+}
