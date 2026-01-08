@@ -38,3 +38,4 @@ NEXT STEP
 This clarity engine becomes the foundation of EduGuruAI – a Human Intelligence OS.`;
   }, 1200);
 }
+document.getElementById("answers").value = "";
