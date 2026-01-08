@@ -6,7 +6,7 @@ async function getClarity() {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": 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"
+      "Authorization": "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"
     },
     body: JSON.stringify({
       model: "gpt-4o-mini",
