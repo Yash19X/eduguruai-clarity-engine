@@ -1,4 +1,3 @@
-
 function getClarity() {
   const input = document.getElementById("answers").value.toLowerCase();
   const output = document.getElementById("output");
