@@ -82,3 +82,4 @@ ACTION:
 
   }, 1000);
 }
+document.getElementById("answers").value = "";
