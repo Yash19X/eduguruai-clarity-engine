@@ -1,29 +1,40 @@
-async function getClarity() {
+function getClarity() {
   const userInput = document.getElementById("answers").value;
-  document.getElementById("output").innerText = "Analyzing your intelligence...";
+  const output = document.getElementById("output");
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "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"
-    },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: "You are EduGuruAI, a Human Intelligence OS Clarity Engine. Convert student confusion into clear direction, strengths, risks, and a 7-day action plan."
-        },
-        {
-          role: "user",
-          content: userInput
-        }
-      ]
-    })
-  });
+  if (!userInput.trim()) {
+    output.innerText = "Please describe your situation honestly.";
+    return;
+  }
 
-  const data = await response.json();
-  document.getElementById("output").innerText =
-    data.choices[0].message.content;
+  output.innerText = "Analyzing your intelligence...\n\n";
+
+  setTimeout(() => {
+    output.innerText =
+`CLARITY SUMMARY
+You are experiencing confusion due to lack of structured guidance, external pressure, and unclear goals.
+
+KEY STRENGTHS
+• Curiosity to understand yourself
+• Awareness of confusion (this is rare)
+• Desire to improve
+
+ROOT PROBLEM
+• No clarity framework
+• Too many options, no direction
+• Fear of wrong decisions
+
+CLEAR DIRECTION
+Focus on building core thinking skills, digital literacy, and one high-leverage skill instead of chasing everything.
+
+7-DAY ACTION PLAN
+Day 1–2: Self-assessment & goal writing  
+Day 3: Learn one future-ready skill (AI / problem solving)  
+Day 4: Apply knowledge in a small task  
+Day 5: Reflect & refine direction  
+Day 6–7: Build consistency & clarity habit
+
+NEXT STEP
+This clarity engine becomes the foundation of EduGuruAI – a Human Intelligence OS.`;
+  }, 1200);
 }
