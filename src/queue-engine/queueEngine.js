@@ -1,3 +1,7 @@
+function queueEngine(userInput, clarityEngineFn) {
+  // Split into multiple questions handled in clarityEngine
+  return clarityEngineFn(userInput);
+}
 function classifyIntent(text) {
   if (text.includes("career")) return "career";
   if (text.includes("AI") || text.includes("MBA")) return "education";
