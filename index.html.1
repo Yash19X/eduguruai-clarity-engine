@@ -1,52 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>EduGuruAI Clarity Engine Demo</title>
+  <title>EduGuruAI – Human Intelligence OS</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    textarea { width: 100%; font-size: 16px; }
+    button { margin: 5px; padding: 10px 20px; font-size: 16px; }
+    .card { border: 1px solid #ccc; padding: 10px; margin: 10px 0; border-radius: 8px; background: #f9f9f9; }
+    .intent { font-weight: bold; color: #2a9d8f; }
+    .next-action { color: #e76f51; font-weight: bold; }
+  </style>
 </head>
 <body>
 
 <h2>EduGuruAI – Human Intelligence OS</h2>
 
-<textarea id="input" rows="4" cols="50"
-  placeholder="Type your confusion here..."></textarea>
-<br><br>
+<textarea id="input" rows="4" placeholder="Type your confusion here..."></textarea>
+<br>
 
 <button onclick="runEngine()">Get Clarity</button>
 <button onclick="showHistory()">View Decision History</button>
 
-<pre id="output"></pre>
-<div id="history" style="margin-top:20px;"></div>
+<div id="output"></div>
+<div id="history"></div>
 
-<!-- 1️⃣ Emotion Engine (optional) -->
+<!-- Load scripts in correct order -->
 <script src="src/emotion-engine/emotionEngine.js"></script>
-
-<!-- 2️⃣ Clarity Engine -->
 <script src="src/clarity-engine/clarityEngine.js"></script>
-
-<!-- 3️⃣ Queue Engine (depends on clarity engine) -->
 <script src="src/queue-engine/queueEngine.js"></script>
-
-<!-- 4️⃣ Decision Memory -->
 <script src="src/decision-memory/decisionMemory.js"></script>
 
-<!-- 5️⃣ RUN ENGINE & HISTORY -->
 <script>
-  function runEngine() {
-    const text = document.getElementById("input").value;
+function runEngine() {
+  const text = document.getElementById("input").value;
+  if (!text.trim()) return alert("Please enter a question or confusion!");
 
-    // Queue Engine call karo
-    const result = queueEngine(text, clarityEngine);
+  const result = queueEngine(text, clarityEngine);
 
-    // Decision Memory me save
-    saveDecision(text, result);
+  // Save to decision memory
+  saveDecision(text, result);
 
-    // Output show karo
-    document.getElementById("output").textContent =
-      JSON.stringify(result, null, 2);
+  // Display result in cards
+  const outputDiv = document.getElementById("output");
+  outputDiv.innerHTML = "";
+  result.forEach(r => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="intent">Intent: ${r.intent_type}</div>
+      <div><b>Question:</b> ${r.question}</div>
+      <div><b>Problem:</b> ${r.clarified_problem}</div>
+      <div><b>Options:</b><ul>${r.structured_options.map(o=>`<li>${o}</li>`).join("")}</ul></div>
+      <div class="next-action">Next Action: ${r.next_action}</div>
+    `;
+    outputDiv.appendChild(card);
+  });
 
-    // History update
-    showHistory();
-  }
+  // Update history
+  showHistory();
+}
 </script>
 
 </body>
