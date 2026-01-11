@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>EduGuruAI Clarity Engine Test</title>
+</head>
+<body>
+
+<h2>Clarity Engine Demo</h2>
+
+<textarea id="input" rows="4" cols="50"
+  placeholder="Type your confusion here..."></textarea>
+<br><br>
+
+<button onclick="runEngine()">Get Clarity</button>
+
+<pre id="output"></pre>
+
+<script src="clarityEngine.js"></script>
+<script>
+  function runEngine() {
+    const text = document.getElementById("input").value;
+    const result = clarityEngine(text);
+    document.getElementById("output").textContent =
+      JSON.stringify(result, null, 2);
+  }
+</script>
+
+</body>
+</html>
