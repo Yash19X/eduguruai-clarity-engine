@@ -1,94 +1,95 @@
-// --- STEP 1: Intent Detection ---
+// --- Emotion Detection ---
+function detectEmotion(text) {
+  const fear = ["fear","worried","scared","anxious"];
+  const confusion = ["confused","not sure","uncertain"];
+  const stress = ["pressure","overwhelmed"];
+  const lower = text.toLowerCase();
+  if (fear.some(w=>lower.includes(w))) return "fear";
+  if (confusion.some(w=>lower.includes(w))) return "confusion";
+  if (stress.some(w=>lower.includes(w))) return "stress";
+  return "neutral";
+}
+
+// --- Intent Detection ---
 function detectIntent(text) {
   const lower = text.toLowerCase();
-
-  if (lower.includes("confused") || lower.includes("not sure")) return "confusion";
-  if (lower.includes("fear") || lower.includes("worried") || lower.includes("scared")) return "fear";
-  if (lower.includes("decide") || lower.includes("choose")) return "decision";
-  if (lower.includes("plan") || lower.includes("roadmap")) return "planning";
-
-  return "learning";
+  if (lower.includes("career")) return "career";
+  if (lower.includes("ai") || lower.includes("mba") || lower.includes("study")) return "education";
+  if (lower.includes("fear") || lower.includes("future") || lower.includes("worried")) return "fear";
+  if (lower.includes("skill") || lower.includes("learn") || lower.includes("practice")) return "learning";
+  return "general";
 }
 
-// --- STEP 2: Noise Removal ---
-function cleanInput(text) {
-  return text
-    .replace(/(very|really|extremely)/gi, "")
-    .replace(/\s+/g, " ")
-    .trim();
+// --- Self-Learning Dictionary ---
+const intentDictionary = {}; // future inputs add here
+
+function updateIntentDictionary(text, intent) {
+  // Learn new phrases for future
+  const words = text.toLowerCase().split(" ");
+  words.forEach(w => {
+    if(!intentDictionary[w]) intentDictionary[w] = intent;
+  });
 }
 
-// --- STEP 3: Problem Restatement ---
-function restateProblem(cleanText, intent) {
-  switch (intent) {
-    case "confusion":
-      return `The core issue is a lack of clarity about a key decision.`;
-    case "fear":
-      return `The core issue is fear affecting rational decision-making.`;
-    case "decision":
-      return `The core issue is choosing between multiple options.`;
-    case "planning":
-      return `The core issue is creating a clear plan forward.`;
-    default:
-      return `The core issue is understanding the situation clearly.`;
+// --- Problem Restatement ---
+function restateProblem(text, intent) {
+  switch(intent) {
+    case "career": return "CAREER CLARITY • Reduce comparison • Choose one direction • Start with skill exploration";
+    case "education": return "EDUCATION CLARITY • Compare options • Explore deeply • Take action on one choice";
+    case "fear": return "EMOTIONAL CLARITY • Fear is normal • Take small steps • Focus on one actionable task";
+    case "learning": return "SKILL CLARITY • One core skill • Daily practice • Apply learning quickly";
+    default: return "GENERAL CLARITY • Break problem into parts • Take small steps • Experiment & learn";
   }
 }
 
-// --- STEP 4: Option Structuring ---
+// --- Options Generator ---
 function generateOptions(intent) {
-  switch (intent) {
-    case "confusion":
-      return [
-        "Break the problem into smaller parts",
-        "Clarify constraints and priorities",
-        "Delay decision until clarity improves"
-      ];
-    case "fear":
-      return [
-        "Separate facts from assumptions",
-        "Assess worst-case realistically",
-        "Focus on controllable actions"
-      ];
-    case "decision":
-      return [
-        "Compare options against clear criteria",
-        "Choose the reversible option first",
-        "Test one option with low risk"
-      ];
-    default:
-      return [
-        "Seek reliable information",
-        "Ask a clearer follow-up question",
-        "Apply learning in a small way"
-      ];
+  const baseOptions = {
+    career: ["Break career goals into small steps", "Talk to mentors", "Explore options deeply"],
+    education: ["Research paths", "Try small courses", "Compare outcomes"],
+    fear: ["Write fears down", "Focus on controllable actions", "Meditate or journal"],
+    learning: ["Practice daily", "Apply learning", "Seek feedback"],
+    general: ["Break problem into smaller steps", "Seek guidance", "Test small actions"]
+  };
+  // Shuffle for fun
+  return baseOptions[intent] ? baseOptions[intent].sort(()=>0.5-Math.random()) : baseOptions["general"];
+}
+
+// --- Direction Recommender ---
+function recommendDirection(intent) {
+  switch(intent){
+    case "career": return "Focus on one career option first.";
+    case "education": return "Experiment with a small step first.";
+    case "fear": return "Reduce fear before making big decisions.";
+    case "learning": return "Convert learning into actionable steps.";
+    default: return "Start small and iterate.";
   }
 }
 
-// --- STEP 5: Direction Recommendation ---
-function recommendDirection(intent) {
-  if (intent === "confusion") return "Focus on clarity before committing to action.";
-  if (intent === "fear") return "Reduce emotional load before making decisions.";
-  if (intent === "decision") return "Choose the option with lowest irreversible risk.";
-  return "Convert learning into action.";
-}
-
-// --- MAIN CLARITY ENGINE ---
+// --- Main Clarity Engine ---
 function clarityEngine(userInput) {
-  const intent = detectIntent(userInput);
-  const cleaned = cleanInput(userInput);
-  const problem = restateProblem(cleaned, intent);
-  const options = generateOptions(intent);
-  const direction = recommendDirection(intent);
+  const questions = userInput.split(/and|but|because|while|,|\./gi).map(q=>q.trim()).filter(q=>q);
+  const results = [];
 
-  return {
-    clarified_problem: problem,
-    intent_type: intent,
-    structured_options: options,
-    recommended_direction: direction,
-    next_action: options[0]
-  };
+  questions.forEach(q => {
+    let intent = detectIntent(q);
+    if(!intent) intent = "general";
+
+    const problem = restateProblem(q, intent);
+    const options = generateOptions(intent);
+    const direction = recommendDirection(intent);
+
+    updateIntentDictionary(q, intent); // Self-learning hook
+
+    results.push({
+      question: q,
+      intent_type: intent,
+      clarified_problem: problem,
+      structured_options: options,
+      recommended_direction: direction,
+      next_action: options[0]
+    });
+  });
+
+  return results;
 }
-
-// --- Example Run ---
-const input = "I'm confused about my career and worried about AI replacing jobs";
-console.log(clarityEngine(input));
