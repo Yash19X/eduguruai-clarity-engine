@@ -48,44 +48,7 @@ GENERAL CLARITY
   output.innerText = responses.join("\n------------------\n");
   document.getElementById("answers").value = "";
 }
-// --- Emotion Detection ---
-function detectEmotion(text) {
-  const fear = ["fear","worried","scared","anxious"];
-  const confusion = ["confused","not sure","uncertain"];
-  const stress = ["pressure","overwhelmed"];
-  const lower = text.toLowerCase();
-  if (fear.some(w=>lower.includes(w))) return "fear";
-  if (confusion.some(w=>lower.includes(w))) return "confusion";
-  if (stress.some(w=>lower.includes(w))) return "stress";
-  return "neutral";
-}
-
-// --- Intent Detection ---
-function detectIntent(text) {
-  const lower = text.toLowerCase();
-  if (lower.includes("career")) return "career";
-  if (lower.includes("ai") || lower.includes("mba") || lower.includes("study")) return "education";
-  if (lower.includes("fear") || lower.includes("future") || lower.includes("worried")) return "fear";
-  if (lower.includes("skill") || lower.includes("learn") || lower.includes("practice")) return "learning";
-  return "general";
-}
-
-// --- Self-Learning Dictionary ---
-const intentDictionary = {}; // future inputs add here
-
-function updateIntentDictionary(text, intent) {
-  // Learn new phrases for future
-  const words = text.toLowerCase().split(" ");
-  words.forEach(w => {
-    if(!intentDictionary[w]) intentDictionary[w] = intent;
-  });
-}
-
-// --- Problem Restatement ---
-function restateProblem(text, intent) {
-  switch(intent) {
-    case "career": return "CAREER CLARITY • Reduce comparison • Choose one direction • Start with skill exploration";
-    case "education": return "EDUCATION CLARITY • Compare options • Explore deeply • Take action on one choice";
+";
     case "fear": return "EMOTIONAL CLARITY • Fear is normal • Take small steps • Focus on one actionable task";
     case "learning": return "SKILL CLARITY • One core skill • Daily practice • Apply learning quickly";
     default: return "GENERAL CLARITY • Break problem into parts • Take small steps • Experiment & learn";
