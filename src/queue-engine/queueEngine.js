@@ -17,13 +17,18 @@ function queueEngine(userInput, clarityEngineFn) {
   const results = [];
 
   for (let i = 0; i < questions.length; i++) {
-    const clarity = clarityEngineFn(questions[i]);
-    results.push({
-      order: i + 1,
-      original_question: questions[i],
-      clarity_output: clarity
-    });
-  }
+  const question = questions[i];
+
+  const clarity = clarityEngineFn(question);
+  const intent = classifyIntent(question);
+
+  results.push({
+    order: i + 1,
+    intent: intent,
+    question: question,
+    clarity_output: clarity
+  });
+}
 
   return {
     total_questions: results.length,
