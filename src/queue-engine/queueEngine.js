@@ -1,3 +1,8 @@
+function classifyIntent(text) {
+  if (text.includes("career")) return "career";
+  if (text.includes("AI") || text.includes("MBA")) return "education";
+  return "general";
+}
 // Split input into multiple logical questions
 function splitQuestions(text) {
   return text
