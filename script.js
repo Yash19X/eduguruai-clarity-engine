@@ -47,4 +47,4 @@ GENERAL CLARITY
 
   output.innerText = responses.join("\n------------------\n");
   document.getElementById("answers").value = "";
-}
+}document.getElementById("answers").value = "";
