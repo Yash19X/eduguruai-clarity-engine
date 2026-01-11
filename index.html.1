@@ -1,49 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>EduGuruAI Clarity Engine Test</title>
+  <title>EduGuruAI Clarity Engine Demo</title>
 </head>
 <body>
 
-<h2>Clarity Engine Demo</h2>
+<h2>EduGuruAI – Human Intelligence OS</h2>
 
 <textarea id="input" rows="4" cols="50"
   placeholder="Type your confusion here..."></textarea>
 <br><br>
 
 <button onclick="runEngine()">Get Clarity</button>
-
-<pre id="output"></pre>
 <button onclick="showHistory()">View Decision History</button>
 
+<pre id="output"></pre>
 <div id="history" style="margin-top:20px;"></div>
-<script src="clarityEngine.js"></script>
-<script>
-  function runEngine() {
-    const text = document.getElementById("input").value;
-    const result = clarityEngine(text);
-    document.getElementById("output").textContent =
-      JSON.stringify(result, null, 2);
-  }
-</script>
-<!-- 1️⃣ Core Brain -->
+
+<!-- 1️⃣ Emotion Engine (optional) -->
+<script src="src/emotion-engine/emotionEngine.js"></script>
+
+<!-- 2️⃣ Clarity Engine -->
 <script src="src/clarity-engine/clarityEngine.js"></script>
 
-<!-- 2️⃣ Queue Engine (depends on clarity engine) -->
+<!-- 3️⃣ Queue Engine (depends on clarity engine) -->
 <script src="src/queue-engine/queueEngine.js"></script>
 
-<!-- 3️⃣ Decision Memory -->
+<!-- 4️⃣ Decision Memory -->
 <script src="src/decision-memory/decisionMemory.js"></script>
+
+<!-- 5️⃣ RUN ENGINE & HISTORY -->
 <script>
   function runEngine() {
     const text = document.getElementById("input").value;
 
-    // Queue Engine → Clarity Engine internally call hota hai
+    // Queue Engine call karo
     const result = queueEngine(text, clarityEngine);
+
+    // Decision Memory me save
+    saveDecision(text, result);
 
     // Output show karo
     document.getElementById("output").textContent =
       JSON.stringify(result, null, 2);
+
+    // History update
+    showHistory();
   }
 </script>
 
