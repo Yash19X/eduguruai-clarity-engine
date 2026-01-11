@@ -24,6 +24,26 @@
       JSON.stringify(result, null, 2);
   }
 </script>
+<!-- 1️⃣ Core Brain -->
+<script src="src/clarity-engine/clarityEngine.js"></script>
+
+<!-- 2️⃣ Queue Engine (depends on clarity engine) -->
+<script src="src/queue-engine/queueEngine.js"></script>
+
+<!-- 3️⃣ Decision Memory -->
+<script src="src/decision-memory/decisionMemory.js"></script>
+<script>
+  function runEngine() {
+    const text = document.getElementById("input").value;
+
+    // Queue Engine → Clarity Engine internally call hota hai
+    const result = queueEngine(text, clarityEngine);
+
+    // Output show karo
+    document.getElementById("output").textContent =
+      JSON.stringify(result, null, 2);
+  }
+</script>
 
 </body>
 </html>
