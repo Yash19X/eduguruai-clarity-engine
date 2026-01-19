@@ -47,3 +47,37 @@ async function getClarity() {
   document.getElementById("output").innerText = out;
   document.getElementById("answers").value = "";
 }
+let recognition;
+
+function startVoice() {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    alert("Voice recognition not supported in this browser.");
+    return;
+  }
+
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  recognition = new SpeechRecognition();
+  recognition.lang = "en-US"; // You can change to "hi-IN" later
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.start();
+
+  recognition.onstart = () => {
+    document.getElementById("output").innerText =
+      "🎙️ Listening... Speak now.";
+  };
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    document.getElementById("answers").value = transcript;
+    getClarity(); // Auto-run clarity engine
+  };
+
+  recognition.onerror = (event) => {
+    document.getElementById("output").innerText =
+      "Voice error: " + event.error;
+  };
+}
