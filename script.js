@@ -44,8 +44,12 @@ async function getClarity() {
   result.responses.forEach((r, i) => {
     out += `Q${i+1}: ${r.question}\nClarity: ${r.clarity.clarified_problem}\nDirection: ${r.clarity.recommended_direction}\nNext: ${r.clarity.next_action}\n\n`;
   });
-  document.getElementById("output").innerText = out;
-  document.getElementById("answers").value = "";
+
+  output.innerText = report;
+speak(result.responses.map((r, i) =>
+  `Question ${i + 1}. ${r.clarity.recommended_direction}. Next step: ${r.clarity.next_action}.`
+).join(" "));
+document.getElementById("answers").value = "";
 }
 let recognition;
 
@@ -80,4 +84,19 @@ function startVoice() {
     document.getElementById("output").innerText =
       "Voice error: " + event.error;
   };
+}
+function speak(text) {
+  if (!("speechSynthesis" in window)) {
+    console.log("Text-to-speech not supported");
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "en-US"; // later hi-IN possible
+  utterance.rate = 1;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+
+  window.speechSynthesis.cancel(); // stop previous speech
+  window.speechSynthesis.speak(utterance);
 }
