@@ -1,12 +1,25 @@
-let lastSpeechText = "";
+/* ------------------- GLOBALS ------------------- */
+let lastSpeechText = ""; // store last clarity text
 
-/* ---------- LANGUAGE DETECTION ---------- */
+/* ------------------- LANGUAGE DETECTION ------------------- */
 function detectLanguage(text) {
-  // If any Devanagari characters found → Hindi
-  return /[\u0900-\u097F]/.test(text) ? "hi-IN" : "en-US";
+  // Simple check for Devanagari (Hindi)
+  const hindiPattern = /[\u0900-\u097F]/;
+  if (hindiPattern.test(text)) return "hi-IN";
+
+  // Check for Spanish
+  const spanishPattern = /[áéíóúñ¿¡]/i;
+  if (spanishPattern.test(text)) return "es-ES";
+
+  // Check for French (basic)
+  const frenchPattern = /[éèêëàâùûç]/i;
+  if (frenchPattern.test(text)) return "fr-FR";
+
+  // Default English
+  return "en-US";
 }
 
-/* ---------- QUESTION SPLITTER ---------- */
+/* ------------------- QUESTION SPLITTER ------------------- */
 function splitQuestions(text) {
   return text
     .replace(/\?/g, "?|")
@@ -15,7 +28,7 @@ function splitQuestions(text) {
     .filter(q => q.length > 3);
 }
 
-/* ---------- INTENT DETECTION ---------- */
+/* ------------------- INTENT DETECTION ------------------- */
 function detectIntent(text) {
   const lower = text.toLowerCase();
 
@@ -34,36 +47,52 @@ function detectIntent(text) {
   return "learning";
 }
 
-/* ---------- CLARITY ENGINE ---------- */
+/* ------------------- CLARITY ENGINE ------------------- */
 function clarityEngine(question, lang) {
   const intent = detectIntent(question);
 
-  if (lang === "hi-IN") {
-    return {
-      clarified_problem: `मुख्य समस्या ${intent} से जुड़ी स्पष्टता की कमी है।`,
-      recommended_direction: "कार्य से पहले स्पष्टता पर ध्यान दें।",
-      next_action: "समस्या को छोटे हिस्सों में बाँटें।"
-    };
+  // Language-specific response
+  switch(lang) {
+    case "hi-IN":
+      return {
+        clarified_problem: `मुख्य समस्या ${intent} से जुड़ी स्पष्टता की कमी है।`,
+        recommended_direction: "कार्य से पहले स्पष्टता पर ध्यान दें।",
+        next_action: "समस्या को छोटे हिस्सों में बाँटें।"
+      };
+    case "es-ES":
+      return {
+        clarified_problem: `El problema principal es la falta de claridad en ${intent}.`,
+        recommended_direction: "Concéntrese en la claridad antes de actuar.",
+        next_action: "Divida el problema en partes más pequeñas."
+      };
+    case "fr-FR":
+      return {
+        clarified_problem: `Le problème principal est le manque de clarté concernant ${intent}.`,
+        recommended_direction: "Concentrez-vous sur la clarté avant d'agir.",
+        next_action: "Divisez le problème en petites parties."
+      };
+    default: // en-US
+      return {
+        clarified_problem: `The core issue is a lack of clarity related to ${intent}.`,
+        recommended_direction: "Focus on clarity before action.",
+        next_action: "Break the situation into smaller parts."
+      };
   }
-
-  return {
-    clarified_problem: `The core issue is a lack of clarity related to ${intent}.`,
-    recommended_direction: "Clarity comes before action. Simplify first.",
-    next_action: "Break the situation into smaller parts."
-  };
 }
 
-/* ---------- MULTI QUESTION ENGINE ---------- */
+/* ------------------- MULTI QUESTION ENGINE ------------------- */
 function multiQuestionEngineV2(input, lang) {
   const questions = splitQuestions(input);
+
   const responses = questions.map(q => ({
     question: q,
     clarity: clarityEngine(q, lang)
   }));
+
   return { count: responses.length, responses };
 }
 
-/* ---------- MAIN ---------- */
+/* ------------------- MAIN FUNCTION ------------------- */
 function getClarity() {
   const userInput = document.getElementById("answers").value;
   const output = document.getElementById("output");
@@ -87,15 +116,14 @@ function getClarity() {
     report += `• Direction: ${r.clarity.recommended_direction}\n`;
     report += `• Next Action: ${r.clarity.next_action}\n\n`;
 
-    lastSpeechText +=
-      `Question ${i + 1}. ${r.clarity.recommended_direction}. Next step: ${r.clarity.next_action}. `;
+    lastSpeechText += `Question ${i + 1}. ${r.clarity.recommended_direction}. Next step: ${r.clarity.next_action}. `;
   });
 
   output.innerText = report;
   document.getElementById("answers").value = "";
 }
 
-/* ---------- VOICE INPUT ---------- */
+/* ------------------- VOICE INPUT ------------------- */
 let recognition;
 
 function startVoice() {
@@ -108,7 +136,11 @@ function startVoice() {
   }
 
   recognition = new SpeechRecognition();
-  recognition.lang = "en-US"; // works for Hindi speech too
+
+  recognition.lang = "en-US"; // SpeechRecognition mostly works best with en-US or hi-IN
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
   recognition.start();
 
   recognition.onstart = () => {
@@ -120,15 +152,23 @@ function startVoice() {
     document.getElementById("answers").value = transcript;
     getClarity();
   };
+
+  recognition.onerror = (event) => {
+    document.getElementById("output").innerText = "Voice error: " + event.error;
+  };
 }
 
-/* ---------- VOICE OUTPUT ---------- */
+/* ------------------- VOICE OUTPUT ------------------- */
 function speak(text) {
   if (!("speechSynthesis" in window)) return;
 
   const lang = detectLanguage(text);
+
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang;
+  utterance.rate = 1;
+  utterance.pitch = 1;
+  utterance.volume = 1;
 
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utterance);
