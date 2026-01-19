@@ -1,33 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>EduGuruAI – Clarity Engine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <h1>EduGuruAI – Clarity Engine</h1>
-  <p>Answer honestly to get clarity about your future.</p>
+  <p class="tagline">
+    Human Intelligence OS • Turning Confusion into Direction
+  </p>
 
-  <textarea id="answers" rows="10" placeholder="Describe your confusion, goals, fears, interests..."></textarea>
-  <br><br>
-<p style="font-size:12px;color:#666;">
-Please ask one question at a time for best clarity.
-</p>
+  <textarea
+    id="answers"
+    rows="8"
+    placeholder="Ask one or multiple questions about your confusion, fears, plans, or decisions..."
+  ></textarea>
+
+  <p class="hint">
+    You may ask multiple questions. EduGuruAI will separate and clarify each one.
+  </p>
 
   <button onclick="getClarity()">Get Clarity</button>
 
   <h2>Your Clarity Report</h2>
   <pre id="output"></pre>
 
-  <script src="script.js"></script>
-<footer>
-  <hr>
-  <p>
-    © 2026 EduGuruAI • Human Intelligence OS  
-    <br>
-    Built for Microsoft Imagine Cup 2026
-  </p>
-</footer>
+  <footer>
+    <hr>
+    <p>
+      © 2026 EduGuruAI • Human Intelligence OS<br>
+      Built for Microsoft Imagine Cup 2026
+    </p>
+  </footer>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
