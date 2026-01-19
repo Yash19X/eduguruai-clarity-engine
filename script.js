@@ -8,49 +8,95 @@ function splitQuestions(text) {
 
 function detectIntent(text) {
   const lower = text.toLowerCase();
-  if (lower.includes("confused") || lower.includes("not sure")) return "confusion";
-  if (lower.includes("fear") || lower.includes("worried") || lower.includes("scared")) return "fear";
-  if (lower.includes("decide") || lower.includes("choose")) return "decision";
-  if (lower.includes("plan") || lower.includes("roadmap")) return "planning";
+
+  if (lower.includes("confused") || lower.includes("not sure"))
+    return "confusion";
+
+  if (lower.includes("fear") || lower.includes("worried") || lower.includes("scared"))
+    return "fear";
+
+  if (lower.includes("decide") || lower.includes("choose"))
+    return "decision";
+
+  if (lower.includes("plan") || lower.includes("roadmap"))
+    return "planning";
+
   return "learning";
 }
 
 function clarityEngine(question) {
   const intent = detectIntent(question);
-  const problem = `The core issue is a lack of clarity about a ${intent} context.`;
+
+  const problem = `The core issue is a lack of clarity related to ${intent}.`;
+
   const options = [
-    "Break the problem into parts",
-    "Clarify priorities",
-    "Begin with the first small step"
+    "Break the situation into smaller parts",
+    "Identify what you can control right now",
+    "Take one small, low-risk action"
   ];
-  const direction = "Focus on clarity before action.";
-  return { clarified_problem: problem, structured_options: options, recommended_direction: direction, next_action: options[0] };
+
+  const direction = "Clarity comes before action. Simplify first.";
+
+  return {
+    clarified_problem: problem,
+    structured_options: options,
+    recommended_direction: direction,
+    next_action: options[0]
+  };
 }
 
 function multiQuestionEngineV2(input) {
   const questions = splitQuestions(input);
+
   const responses = questions.map(q => ({
     question: q,
     clarity: clarityEngine(q)
   }));
-  return { type: "multi-question", count: responses.length, responses };
+
+  return {
+    type: "multi-question",
+    count: responses.length,
+    responses
+  };
 }
 
-async function getClarity() {
+function getClarity() {
   const userInput = document.getElementById("answers").value;
-  if (!userInput.trim()) { document.getElementById("output").innerText = "Please enter a question."; return; }
+  const output = document.getElementById("output");
+
+  if (!userInput.trim()) {
+    output.innerText = "Please enter your question or confusion.";
+    return;
+  }
+
   const result = multiQuestionEngineV2(userInput);
-  let out = "";
+
+  let report = `EduGuruAI Clarity Report\n-------------------------\n`;
+  report += `Questions detected: ${result.count}\n\n`;
+
   result.responses.forEach((r, i) => {
-    out += `Q${i+1}: ${r.question}\nClarity: ${r.clarity.clarified_problem}\nDirection: ${r.clarity.recommended_direction}\nNext: ${r.clarity.next_action}\n\n`;
+    report += `Q${i + 1}: ${r.question}\n`;
+    report += `• Core Issue: ${r.clarity.clarified_problem}\n`;
+    report += `• Direction: ${r.clarity.recommended_direction}\n`;
+    report += `• Next Action: ${r.clarity.next_action}\n\n`;
   });
 
   output.innerText = report;
-speak(result.responses.map((r, i) =>
-  `Question ${i + 1}. ${r.clarity.recommended_direction}. Next step: ${r.clarity.next_action}.`
-).join(" "));
-document.getElementById("answers").value = "";
+
+  speak(
+    result.responses
+      .map(
+        (r, i) =>
+          `Question ${i + 1}. ${r.clarity.recommended_direction}. Next step: ${r.clarity.next_action}.`
+      )
+      .join(" ")
+  );
+
+  document.getElementById("answers").value = "";
 }
+
+/* ---------- VOICE INPUT ---------- */
+
 let recognition;
 
 function startVoice() {
@@ -63,7 +109,7 @@ function startVoice() {
     window.SpeechRecognition || window.webkitSpeechRecognition;
 
   recognition = new SpeechRecognition();
-  recognition.lang = "en-US"; // You can change to "hi-IN" later
+  recognition.lang = "en-US";
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
 
@@ -77,7 +123,7 @@ function startVoice() {
   recognition.onresult = (event) => {
     const transcript = event.results[0][0].transcript;
     document.getElementById("answers").value = transcript;
-    getClarity(); // Auto-run clarity engine
+    getClarity();
   };
 
   recognition.onerror = (event) => {
@@ -85,6 +131,9 @@ function startVoice() {
       "Voice error: " + event.error;
   };
 }
+
+/* ---------- VOICE OUTPUT ---------- */
+
 function speak(text) {
   if (!("speechSynthesis" in window)) {
     console.log("Text-to-speech not supported");
@@ -92,11 +141,11 @@ function speak(text) {
   }
 
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "en-US"; // later hi-IN possible
+  utterance.lang = "en-US";
   utterance.rate = 1;
   utterance.pitch = 1;
   utterance.volume = 1;
 
-  window.speechSynthesis.cancel(); // stop previous speech
+  window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utterance);
 }
