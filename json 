@@ -1,0 +1,18 @@
+{
+  "decision_id": "uuid",
+  "user_id": "anonymous_or_hashed_id",
+  "timestamp": "ISO-8601",
+  "intent_type": "confusion | fear | decision | planning | learning",
+  "original_question": "string",
+  "clarified_problem": "string",
+  "options_presented": [
+    "option 1",
+    "option 2",
+    "option 3"
+  ],
+  "recommended_direction": "string",
+  "next_action": "string",
+  "confidence_level": "low | medium | high",
+  "follow_up_required": true,
+  "outcome_status": "unknown | acted | revisited"
+}
