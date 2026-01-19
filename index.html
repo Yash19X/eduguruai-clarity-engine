@@ -16,14 +16,16 @@
   <textarea
     id="answers"
     rows="8"
-    placeholder="Ask one or multiple questions about your confusion, fears, plans, or decisions..."
+    placeholder="Ask in Hindi or English. You may ask multiple questions..."
   ></textarea>
 
   <p class="hint">
-    You may ask multiple questions. EduGuruAI will separate and clarify each one.
+    Text or voice — EduGuruAI will detect language and clarify each question.
   </p>
-<button onclick="startVoice()">🎤 Speak Your Question</button>
+
+  <button onclick="startVoice()">🎤 Speak</button>
   <button onclick="getClarity()">Get Clarity</button>
+  <button onclick="speakLast()">🔊 Speak Clarity</button>
 
   <h2>Your Clarity Report</h2>
   <pre id="output"></pre>
