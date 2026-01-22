@@ -15,10 +15,12 @@
       Human Intelligence OS • Turning Confusion into Direction
     </p>
 
+    <!-- ✅ Input Card -->
     <div class="card">
+
       <textarea
         id="answers"
-        rows="7"
+        rows="8"
         placeholder="Ask in Hindi or English. You may ask multiple questions..."
       ></textarea>
 
@@ -26,6 +28,7 @@
         Text or voice — EduGuruAI will detect language and clarify each question.
       </p>
 
+      <!-- ✅ Button Row -->
       <div class="button-row">
         <button onclick="startVoice()">🎤 Speak</button>
         <button class="primary" onclick="getClarity()">Get Clarity</button>
@@ -38,18 +41,13 @@
         <button class="danger" onclick="clearDecisionHistoryUI()">🗑️ Clear History</button>
       </div>
 
-      <div id="statusBar" class="status hidden">
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="statusText">EduGuruAI is analyzing…</span>
-      </div>
     </div>
 
     <h2>Your Clarity Report</h2>
 
+    <!-- ✅ Output Card -->
     <div class="card">
-      <div id="outputCards" class="outputCards"></div>
+      <pre id="output"></pre>
     </div>
 
     <footer>
@@ -62,6 +60,6 @@
 
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
