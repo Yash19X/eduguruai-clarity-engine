@@ -1,25 +1,9 @@
-/* ------------------- GLOBALS ------------------- */
-let lastSpeechText = ""; // store last clarity text
+let lastSpeechText = "";
 
-/* ------------------- LANGUAGE DETECTION ------------------- */
 function detectLanguage(text) {
-  // Simple check for Devanagari (Hindi)
-  const hindiPattern = /[\u0900-\u097F]/;
-  if (hindiPattern.test(text)) return "hi-IN";
-
-  // Check for Spanish
-  const spanishPattern = /[áéíóúñ¿¡]/i;
-  if (spanishPattern.test(text)) return "es-ES";
-
-  // Check for French (basic)
-  const frenchPattern = /[éèêëàâùûç]/i;
-  if (frenchPattern.test(text)) return "fr-FR";
-
-  // Default English
-  return "en-US";
+  return /[\u0900-\u097F]/.test(text) ? "hi-IN" : "en-US";
 }
 
-/* ------------------- QUESTION SPLITTER ------------------- */
 function splitQuestions(text) {
   return text
     .replace(/\?/g, "?|")
@@ -28,82 +12,170 @@ function splitQuestions(text) {
     .filter(q => q.length > 3);
 }
 
-/* ------------------- INTENT DETECTION ------------------- */
+/* ✅ Much stronger intent detection */
 function detectIntent(text) {
-  const lower = text.toLowerCase();
+  const t = text.toLowerCase();
 
-  if (lower.includes("confused") || lower.includes("samajh") || lower.includes("clear"))
-    return "confusion";
+  // Career
+  if (t.includes("career") || t.includes("job") || t.includes("profession") || t.includes("placement") || t.includes("future"))
+    return "career";
 
-  if (lower.includes("fear") || lower.includes("dar") || lower.includes("scared"))
+  // Education / Study
+  if (t.includes("study") || t.includes("exam") || t.includes("school") || t.includes("college") || t.includes("subject"))
+    return "education";
+
+  // Money / Business
+  if (t.includes("money") || t.includes("earn") || t.includes("business") || t.includes("startup") || t.includes("income"))
+    return "money";
+
+  // Stress / Fear
+  if (t.includes("fear") || t.includes("scared") || t.includes("worried") || t.includes("anxiety") || t.includes("stress") || t.includes("dar"))
     return "fear";
 
-  if (lower.includes("decide") || lower.includes("choose") || lower.includes("nirnay"))
+  // Decision / Choose
+  if (t.includes("choose") || t.includes("select") || t.includes("decide") || t.includes("option") || t.includes("which"))
     return "decision";
 
-  if (lower.includes("plan") || lower.includes("roadmap") || lower.includes("yojana"))
+  // Planning
+  if (t.includes("plan") || t.includes("roadmap") || t.includes("strategy") || t.includes("how to"))
     return "planning";
 
-  return "learning";
+  // Default
+  return "general";
 }
 
-/* ------------------- CLARITY ENGINE ------------------- */
-function clarityEngine(question, lang) {
+/* ✅ Real Clarity Engine responses based on intent */
+function clarityEngine(question) {
+  const lang = detectLanguage(question);
   const intent = detectIntent(question);
 
-  // Language-specific response
-  switch(lang) {
-    case "hi-IN":
+  if (lang === "hi-IN") {
+    switch (intent) {
+      case "career":
+        return {
+          clarified_problem: "Aap career direction ko lekar confused hain.",
+          recommended_direction: "Pehle apni strength + interest + market demand align karo.",
+          next_action: "3 skills likho jo aap improve kar sakte ho aur 1 career track choose karo."
+        };
+
+      case "education":
+        return {
+          clarified_problem: "Aap padhai / exam ko lekar clarity nahi paa rahe ho.",
+          recommended_direction: "Syllabus ko chhote parts me divide karke daily plan banao.",
+          next_action: "Aaj ka 1 topic select karo aur 45 minutes deep study karo."
+        };
+
+      case "money":
+        return {
+          clarified_problem: "Aap earning / money goal ko lekar unclear ho.",
+          recommended_direction: "Skill-first approach lo, phir income model choose karo.",
+          next_action: "1 skill choose karo (coding/design/sales) aur 7 din ka learning plan banao."
+        };
+
+      case "fear":
+        return {
+          clarified_problem: "Aapka fear aapki decision clarity ko block kar raha hai.",
+          recommended_direction: "Facts aur assumptions ko alag karo, phir next step choose karo.",
+          next_action: "Apna biggest fear likho aur uska smallest controllable step define karo."
+        };
+
+      case "decision":
+        return {
+          clarified_problem: "Aapko options me se choose karna hai par criteria clear nahi hai.",
+          recommended_direction: "3 criteria set karo: interest, scope, effort.",
+          next_action: "Har option ko 1–10 score do aur top 1 choose karo."
+        };
+
+      case "planning":
+        return {
+          clarified_problem: "Aapko roadmap chahiye but steps unclear hain.",
+          recommended_direction: "Roadmap ko 3 phases me divide karo: learn → build → launch.",
+          next_action: "Phase 1 ke liye aaj ka 1 task fix karo (1 hour)."
+        };
+
+      default:
+        return {
+          clarified_problem: "Aap kisi important cheez ko lekar confusion me ho.",
+          recommended_direction: "Problem ko clearly define karo aur next smallest step choose karo.",
+          next_action: "1 sentence me apni main problem likho."
+        };
+    }
+  }
+
+  // ✅ English responses
+  switch (intent) {
+    case "career":
       return {
-        clarified_problem: `मुख्य समस्या ${intent} से जुड़ी स्पष्टता की कमी है।`,
-        recommended_direction: "कार्य से पहले स्पष्टता पर ध्यान दें।",
-        next_action: "समस्या को छोटे हिस्सों में बाँटें।"
+        clarified_problem: "You are confused about your career direction.",
+        recommended_direction: "Align your strengths, interests, and market demand first.",
+        next_action: "List 3 skills to improve and pick 1 career track to explore this week."
       };
-    case "es-ES":
+
+    case "education":
       return {
-        clarified_problem: `El problema principal es la falta de claridad en ${intent}.`,
-        recommended_direction: "Concéntrese en la claridad antes de actuar.",
-        next_action: "Divida el problema en partes más pequeñas."
+        clarified_problem: "You need clarity about studying or exams.",
+        recommended_direction: "Break the syllabus into small parts and follow a daily plan.",
+        next_action: "Pick 1 topic today and do 45 minutes of focused study."
       };
-    case "fr-FR":
+
+    case "money":
       return {
-        clarified_problem: `Le problème principal est le manque de clarté concernant ${intent}.`,
-        recommended_direction: "Concentrez-vous sur la clarté avant d'agir.",
-        next_action: "Divisez le problème en petites parties."
+        clarified_problem: "You are unclear about how to earn or grow income.",
+        recommended_direction: "Build one high-value skill, then choose an income model.",
+        next_action: "Pick 1 skill and create a 7-day learning plan."
       };
-    default: // en-US
+
+    case "fear":
       return {
-        clarified_problem: `The core issue is a lack of clarity related to ${intent}.`,
-        recommended_direction: "Focus on clarity before action.",
-        next_action: "Break the situation into smaller parts."
+        clarified_problem: "Fear is blocking your decision clarity.",
+        recommended_direction: "Separate facts from assumptions before deciding.",
+        next_action: "Write your biggest fear and define one controllable step."
+      };
+
+    case "decision":
+      return {
+        clarified_problem: "You need to choose between options but your criteria are unclear.",
+        recommended_direction: "Decide based on interest, scope, and effort.",
+        next_action: "Score each option from 1–10 and pick the top one."
+      };
+
+    case "planning":
+      return {
+        clarified_problem: "You want a roadmap but the steps are unclear.",
+        recommended_direction: "Build in phases: learn → build → launch.",
+        next_action: "Pick one task for Phase 1 and execute it for 1 hour today."
+      };
+
+    default:
+      return {
+        clarified_problem: "You are confused about something important.",
+        recommended_direction: "Define the real problem and choose the smallest next step.",
+        next_action: "Write your main problem in one sentence."
       };
   }
 }
 
-/* ------------------- MULTI QUESTION ENGINE ------------------- */
-function multiQuestionEngineV2(input, lang) {
+/* Multi-question engine */
+function multiQuestionEngine(input) {
   const questions = splitQuestions(input);
-
   const responses = questions.map(q => ({
     question: q,
-    clarity: clarityEngine(q, lang)
+    clarity: clarityEngine(q)
   }));
 
   return { count: responses.length, responses };
 }
 
-/* ------------------- MAIN FUNCTION ------------------- */
 function getClarity() {
-  const userInput = document.getElementById("answers").value;
+  const input = document.getElementById("answers").value;
   const output = document.getElementById("output");
 
-  if (!userInput.trim()) {
-    output.innerText = "Please enter your question or confusion.";
+  if (!input.trim()) {
+    output.innerText = "Please enter a question.";
     return;
   }
 
-  const lang = detectLanguage(userInput);
-  const result = multiQuestionEngineV2(userInput, lang);
+  const result = multiQuestionEngine(input);
 
   let report = `EduGuruAI Clarity Report\n-------------------------\n`;
   report += `Questions detected: ${result.count}\n\n`;
@@ -120,55 +192,15 @@ function getClarity() {
   });
 
   output.innerText = report;
-  document.getElementById("answers").value = "";
 }
 
-/* ------------------- VOICE INPUT ------------------- */
-let recognition;
-
-function startVoice() {
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if (!SpeechRecognition) {
-    alert("Voice recognition not supported.");
-    return;
-  }
-
-  recognition = new SpeechRecognition();
-
-  recognition.lang = "en-US"; // SpeechRecognition mostly works best with en-US or hi-IN
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
-
-  recognition.start();
-
-  recognition.onstart = () => {
-    document.getElementById("output").innerText = "🎙️ Listening...";
-  };
-
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    document.getElementById("answers").value = transcript;
-    getClarity();
-  };
-
-  recognition.onerror = (event) => {
-    document.getElementById("output").innerText = "Voice error: " + event.error;
-  };
-}
-
-/* ------------------- VOICE OUTPUT ------------------- */
+/* Voice Output */
 function speak(text) {
   if (!("speechSynthesis" in window)) return;
 
   const lang = detectLanguage(text);
-
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang;
-  utterance.rate = 1;
-  utterance.pitch = 1;
-  utterance.volume = 1;
 
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utterance);
@@ -180,4 +212,28 @@ function speakLast() {
     return;
   }
   speak(lastSpeechText);
+}
+
+/* Voice Input */
+let recognition;
+function startVoice() {
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert("Voice recognition not supported.");
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = "hi-IN"; // Hindi + Hinglish best
+  recognition.start();
+
+  document.getElementById("output").innerText = "🎙️ Listening...";
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    document.getElementById("answers").value = transcript;
+    getClarity();
+  };
 }
