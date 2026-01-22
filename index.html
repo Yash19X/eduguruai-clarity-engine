@@ -1,46 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>EduGuruAI – Clarity Engine</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <h1>EduGuruAI – Clarity Engine</h1>
-  <p class="tagline">
-    Human Intelligence OS • Turning Confusion into Direction
-  </p>
+  <div class="container">
 
-  <textarea
-    id="answers"
-    rows="8"
-    placeholder="Ask in Hindi or English. You may ask multiple questions..."
-  ></textarea>
-
-  <p class="hint">
-    Text or voice — EduGuruAI will detect language and clarify each question.
-  </p>
-
-  <button onclick="startVoice()">🎤 Speak</button>
-  <button onclick="getClarity()">Get Clarity</button>
-  <button onclick="speakLast()">🔊 Speak Clarity</button>
-<button onclick="setDemoPrompt('career')">⚡ Demo: Career</button>
-<button onclick="setDemoPrompt('study')">⚡ Demo: Study</button>
-<button onclick="setDemoPrompt('decision')">⚡ Demo: Decision</button>
-<button onclick="clearDecisionHistoryUI()">🗑️ Clear History</button>
-
-  <h2>Your Clarity Report</h2>
-  <pre id="output"></pre>
-
-  <footer>
-    <hr>
-    <p>
-      © 2026 EduGuruAI • Human Intelligence OS<br>
-      Built for Microsoft Imagine Cup 2026
+    <h1>EduGuruAI – Clarity Engine</h1>
+    <p class="tagline">
+      Human Intelligence OS • Turning Confusion into Direction
     </p>
-  </footer>
+
+    <!-- ✅ Input Card -->
+    <div class="card">
+
+      <textarea
+        id="answers"
+        rows="8"
+        placeholder="Ask in Hindi or English. You may ask multiple questions..."
+      ></textarea>
+
+      <p class="hint">
+        Text or voice — EduGuruAI will detect language and clarify each question.
+      </p>
+
+      <!-- ✅ Button Row -->
+      <div class="button-row">
+        <button onclick="startVoice()">🎤 Speak</button>
+        <button class="primary" onclick="getClarity()">Get Clarity</button>
+        <button onclick="speakLast()">🔊 Speak Clarity</button>
+
+        <button onclick="setDemoPrompt('career')">⚡ Demo: Career</button>
+        <button onclick="setDemoPrompt('study')">⚡ Demo: Study</button>
+        <button onclick="setDemoPrompt('decision')">⚡ Demo: Decision</button>
+
+        <button class="danger" onclick="clearDecisionHistoryUI()">🗑️ Clear History</button>
+      </div>
+
+    </div>
+
+    <h2>Your Clarity Report</h2>
+
+    <!-- ✅ Output Card -->
+    <div class="card">
+      <pre id="output"></pre>
+    </div>
+
+    <footer>
+      <hr />
+      <p>
+        © 2026 EduGuruAI • Human Intelligence OS<br />
+        Built for Microsoft Imagine Cup 2026
+      </p>
+    </footer>
+
+  </div>
 
   <script src="script.js" defer></script>
 </body>
