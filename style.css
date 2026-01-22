@@ -1,130 +1,199 @@
+/* =========================
+   EduGuruAI – Premium MVP UI
+   Booth / Demo Ready
+   ========================= */
+
 :root {
-  --border: rgba(255, 255, 255, 0.15);
-  --muted: rgba(255, 255, 255, 0.7);
+  --bg: #0b1020;
+  --card: rgba(255, 255, 255, 0.06);
+  --card2: rgba(255, 255, 255, 0.09);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.72);
+  --border: rgba(255, 255, 255, 0.12);
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  --radius: 18px;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  color: #fff;
+  padding: 24px 16px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: radial-gradient(1200px 600px at 20% 10%, #1a2a6c33, transparent),
+              radial-gradient(800px 500px at 90% 20%, #b21f1f25, transparent),
+              radial-gradient(900px 600px at 70% 80%, #00c6ff25, transparent),
+              var(--bg);
+  color: var(--text);
+  line-height: 1.45;
 }
 
+/* Layout container */
 .container {
-  max-width: 760px;
-  margin: auto;
-  padding: 20px;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
 }
 
+/* Headings */
 h1 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  letter-spacing: 0.2px;
   text-align: center;
 }
 
 .tagline {
+  margin: 0 auto 18px;
+  max-width: 700px;
   text-align: center;
   color: var(--muted);
-}
-
-textarea {
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.25);
-  color: white;
   font-size: 1rem;
 }
 
+/* Premium card wrapper sections */
+.card {
+  background: linear-gradient(180deg, var(--card), var(--card2));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+/* Textarea */
+textarea {
+  width: 100%;
+  padding: 14px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+  resize: vertical;
+  min-height: 140px;
+}
+
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+textarea:focus {
+  border-color: rgba(255, 255, 255, 0.24);
+  box-shadow: 0 0 0 4px rgba(0, 198, 255, 0.12);
+}
+
+/* Hint */
+.hint {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+/* Button row */
 .button-row {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 14px;
   justify-content: center;
 }
 
+/* Buttons */
 button {
-  padding: 10px 14px;
-  border-radius: 999px;
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.08);
-  color: white;
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 14px;
   cursor: pointer;
+  font-size: 0.96rem;
+  transition: transform 0.12s ease, background 0.12s ease, border 0.12s ease;
 }
 
 button:hover {
-  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
 }
 
-/* STATUS */
-.status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 12px;
-}
-.hidden { display: none; }
-
-.dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: white;
-  animation: bounce 1s infinite;
-}
-.dot:nth-child(2) { animation-delay: .15s }
-.dot:nth-child(3) { animation-delay: .3s }
-
-@keyframes bounce {
-  0%,80%,100% { opacity: .3 }
-  40% { opacity: 1 }
+button:active {
+  transform: translateY(0);
 }
 
-/* OUTPUT */
-.outputCards {
-  display: grid;
-  gap: 12px;
+/* Primary button */
+button.primary {
+  background: rgba(0, 198, 255, 0.16);
+  border-color: rgba(0, 198, 255, 0.35);
 }
 
-.responseCard {
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 14px;
-  background: rgba(255, 255, 255, 0.06);
+button.primary:hover {
+  background: rgba(0, 198, 255, 0.22);
 }
 
-.cardHeader {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
+/* Danger button */
+button.danger {
+  background: rgba(255, 80, 80, 0.12);
+  border-color: rgba(255, 80, 80, 0.28);
 }
 
-.badges {
-  display: flex;
-  gap: 8px;
+button.danger:hover {
+  background: rgba(255, 80, 80, 0.18);
 }
 
-.badge {
-  font-size: 0.8rem;
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-}
-
-.badge.good {
-  background: rgba(0, 200, 255, 0.15);
-}
-
-.quickReplies {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 14px;
-}
-
-footer {
-  margin-top: 40px;
+/* Section titles */
+h2 {
+  margin: 18px 0 10px;
+  font-size: 1.25rem;
   text-align: center;
-  font-size: 0.85rem;
+}
+
+/* Output */
+pre#output {
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.25);
+  padding: 14px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 0.96rem;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* Footer */
+footer {
+  margin-top: 24px;
+  text-align: center;
   color: var(--muted);
+  font-size: 0.9rem;
+}
+
+footer hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 20px 0 14px;
+}
+
+/* Mobile */
+@media (max-width: 520px) {
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .tagline {
+    font-size: 0.95rem;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .button-row {
+    gap: 8px;
+  }
 }
