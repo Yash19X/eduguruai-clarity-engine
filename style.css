@@ -1,64 +1,199 @@
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f7f9fc;
-  color: #222;
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
+/* =========================
+   EduGuruAI – Premium MVP UI
+   Booth / Demo Ready
+   ========================= */
+
+:root {
+  --bg: #0b1020;
+  --card: rgba(255, 255, 255, 0.06);
+  --card2: rgba(255, 255, 255, 0.09);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.72);
+  --border: rgba(255, 255, 255, 0.12);
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  --radius: 18px;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 24px 16px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: radial-gradient(1200px 600px at 20% 10%, #1a2a6c33, transparent),
+              radial-gradient(800px 500px at 90% 20%, #b21f1f25, transparent),
+              radial-gradient(900px 600px at 70% 80%, #00c6ff25, transparent),
+              var(--bg);
+  color: var(--text);
+  line-height: 1.45;
+}
+
+/* Layout container */
+.container {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+/* Headings */
 h1 {
-  color: #1a73e8;
+  margin: 0 0 8px;
+  font-size: 2rem;
+  letter-spacing: 0.2px;
+  text-align: center;
 }
 
 .tagline {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 20px;
+  margin: 0 auto 18px;
+  max-width: 700px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 1rem;
 }
 
+/* Premium card wrapper sections */
+.card {
+  background: linear-gradient(180deg, var(--card), var(--card2));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+/* Textarea */
 textarea {
   width: 100%;
-  padding: 12px;
-  font-size: 15px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 14px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
   resize: vertical;
+  min-height: 140px;
 }
 
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+textarea:focus {
+  border-color: rgba(255, 255, 255, 0.24);
+  box-shadow: 0 0 0 4px rgba(0, 198, 255, 0.12);
+}
+
+/* Hint */
 .hint {
-  font-size: 12px;
-  color: #666;
-  margin-top: 6px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
 }
 
+/* Button row */
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+  justify-content: center;
+}
+
+/* Buttons */
 button {
-  margin-top: 10px;
-  margin-right: 8px;
-  padding: 10px 18px;
-  font-size: 14px;
-  background: #1a73e8;
-  color: white;
-  border: none;
-  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 14px;
   cursor: pointer;
+  font-size: 0.96rem;
+  transition: transform 0.12s ease, background 0.12s ease, border 0.12s ease;
 }
 
 button:hover {
-  background: #1558b0;
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
 }
 
-pre {
-  background: #fff;
-  border: 1px solid #ddd;
-  padding: 15px;
-  white-space: pre-wrap;
-  border-radius: 6px;
+button:active {
+  transform: translateY(0);
 }
 
-footer {
-  margin-top: 40px;
+/* Primary button */
+button.primary {
+  background: rgba(0, 198, 255, 0.16);
+  border-color: rgba(0, 198, 255, 0.35);
+}
+
+button.primary:hover {
+  background: rgba(0, 198, 255, 0.22);
+}
+
+/* Danger button */
+button.danger {
+  background: rgba(255, 80, 80, 0.12);
+  border-color: rgba(255, 80, 80, 0.28);
+}
+
+button.danger:hover {
+  background: rgba(255, 80, 80, 0.18);
+}
+
+/* Section titles */
+h2 {
+  margin: 18px 0 10px;
+  font-size: 1.25rem;
   text-align: center;
-  font-size: 12px;
-  color: #777;
+}
+
+/* Output */
+pre#output {
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.25);
+  padding: 14px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 0.96rem;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* Footer */
+footer {
+  margin-top: 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+footer hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 20px 0 14px;
+}
+
+/* Mobile */
+@media (max-width: 520px) {
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .tagline {
+    font-size: 0.95rem;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .button-row {
+    gap: 8px;
+  }
 }
