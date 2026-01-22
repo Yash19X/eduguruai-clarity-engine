@@ -1,4 +1,4 @@
-let lastSpokenText = "";
+0let lastSpokenText = "";
 let decisionHistory = JSON.parse(localStorage.getItem("decisionHistory") || "[]");
 
 /* ------------------ VOICE INPUT ------------------ */
@@ -152,3 +152,22 @@ function clearDecisionHistoryUI() {
   localStorage.removeItem("decisionHistory");
   document.getElementById("outputCards").innerHTML = "";
 }
+/* ------------------ URL SHARE DEMO ------------------ */
+function loadFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const q = params.get("q");
+
+  if (q) {
+    const decoded = decodeURIComponent(q.replace(/\+/g, " "));
+    const input = document.getElementById("answers");
+    input.value = decoded;
+
+    // Auto run clarity after short delay
+    setTimeout(() => {
+      getClarity();
+    }, 400);
+  }
+}
+
+// Run on page load
+window.addEventListener("load", loadFromURL);
